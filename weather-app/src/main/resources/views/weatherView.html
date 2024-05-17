@@ -1,0 +1,663 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>Weather App Landing page</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Google Font link-->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/bootsnav.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!--Theme Responsive css-->
+    <link rel="stylesheet" href="css/responsive.css" />
+    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            /* background-color: #5b81ec; */
+            overflow: hidden;
+        }
+
+        .home,
+        .features,
+        .user-guide {
+            min-height: 100vh;
+            width: 100%;
+            background-color: #5b81ec;
+            background-image: url(images/homebg.png);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #map {
+            width: 450px;
+            height: 200px;
+            border-radius: 10px;
+        }
+
+        .map-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 200px;
+        }
+
+        #mapFitur1,
+        #mapFitur2,
+        #mapFitur3 {
+            width: 100%;
+            height: 100%;
+            max-width: 500px;
+            max-height: 200px;
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body data-spy="scroll" data-target=".navbar-collapse">
+    <div id="loading">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+                <div class="object" id="object_four"></div>
+            </div>
+        </div>
+    </div><!-- End off Preloader -->
+    <div class="column">
+        <nav class="navbar navbar-default bootsnav navbar-fixed white no-background">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-center">
+                        <li><a href="#home" id="homeLink">Beranda</a></li>
+                        <li><a href="#features" id="featuresLink">Fitur</a></li>
+                        <li><a href="#userGuide" id="userGuideLink">Petunjuk</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <section id="home" class="home">
+            <div class="container">
+                <div class="row">
+                    <div class="main_home">
+                        <div class="col-md-6">
+                            <div class="home_text">
+                                <h1 class="text-white">Dapatkan informasi cuaca terkini</h1>
+                                <div id="map"></div>
+                                <form action="" class="form">
+                                    <input type="text" id="latitude" placeholder="latitude">
+                                    <input type="text" id="longitude" placeholder="longitude">
+                                </form>
+                                <a href="" class="btn btn-primary m-top-20" id="btnHeader" type="Submit">Cari</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="home_text">
+                                <div class="phone_one phone_attr1 sm-m-top-50" style="margin-left: 100px;">
+                                    <img id="myImage" src="images/cloud1.png" alt="Image" width="150" height="150">
+                                    <h1 class="text-white"><span id="lokasi" class="text-white"></span></h1>
+                                    <h3 class="text-white" style="margin-left: 10px; margin-top: 5px;"> <span id="jam" class="text-white"></span> | <span id="temp" class="text-white"></span>&degCelcius</h3>
+                                    <h3 class="text-white mt-12" style="margin-left: 10px; margin-top: 5px;"><span id="kon" class="text-white"></span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="row">
+                    <div class="main_features p-top-100">
+                        <div class="col-md-12 text-center">
+                            <button id="showFeature1" class="btn btn-secondary m-top-10">Fitur 1: Perkiraan Cuaca</button>
+                            <button id="showFeature2" class="btn btn-secondary m-top-10">Fitur 2: Jadwal Matahari</button>
+                            <button id="showFeature3" class="btn btn-secondary m-top-10">Fitur 3: Tingkat Polusi</button>
+                        </div>
+                        <div id="feature1" class="feature-content home-text" style="margin-top: 50px;">
+                            <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+                                <div class="head_title text-center">
+                                    <h2 class="text-white" style="margin-top: 20px;">Ada rencana berpergian?</h2>
+                                    <h5 style="color: #f0f6f8; font-weight: 500;">
+                                        Tenang kami akan sedikit membantu anda<br>Silakan cek perkiraan dari kami dan dapatkan rekomendasinya
+                                    </h5>
+                                    <div class="map-container">
+                                        <div id="mapFitur1"></div>
+                                    </div>
+                                        <form action="" class="form">
+                                            <input type="text" id="latitudeFitur1" placeholder="latitude">
+                                            <input type="text" id="longitudeFitur1" placeholder="longitude">
+                                        </form>
+                                        <a href="" class="btn btn-primary m-top-10" id="btnPerkiraan" type="Submit">Cek perkiraan</a>
+                                    <div id="saranPerkiraan" style="margin-top: 10px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="feature2" class="feature-content home-text">
+                            <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+                                <div class="head_title text-center">
+                                    <h2 class="text-white" style="margin-top: 20px;">Anda anak indie atau hobi fotografi?</h2>
+                                    <h5 style="color: #f0f6f8; font-weight: 500;">
+                                        Biarkan kami membantu anda untuk mengabadikan momen berharga<br>Berikut adalah jadwal terbit dan terbenam matahari
+                                    </h5>
+                                    <div class="map-container">
+                                        <div id="mapFitur2"></div>
+                                    </div>
+                                        <form action="" class="form">
+                                            <input type="text" id="latitudeFitur2" placeholder="latitude">
+                                            <input type="text" id="longitudeFitur2" placeholder="longitude">
+                                        </form>
+                                        <a href="" class="btn btn-primary m-top-10" id="btnWaktu" type="Submit">Cek waktu</a>
+                                    <div id="waktu"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="feature3" class="feature-content home-text">
+                            <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+                                <div class="head_title text-center">
+                                    <h2 class="text-white" style="margin-top: 20px;">Kondisi kesehatan lingkungan anda</h2>
+                                    <h5 style="color: #f0f6f8; font-weight: 500;">
+                                        Kami akan memberikan kualitas udara terkini<br>Lihat kondisi lingkunga anda dengan seksama
+                                    </h5>
+                                    <div class="map-container">
+                                        <div id="mapFitur3"></div>
+                                    </div>
+                                        <form action="" class="form">
+                                            <input type="text" id="latitudeFitur3" placeholder="latitude">
+                                            <input type="text" id="longitudeFitur3" placeholder="longitude">
+                                        </form>
+                                        <a href="" class="btn btn-primary m-top-10" id="btnPolusi" type="Submit">Cek tingkat polusi</a>
+                                    <div id="saranPolusi"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End off row -->
+            </div><!-- End off container -->
+        </section><!-- End off Featured Section -->
+
+        <section id="userGuide" class="user-guide" style="background-color: #5b81ec;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12" style="margin-top: 100px;">
+                        <div class="head_title text-center">
+                            <h2 class="text-white">Petunjuk Penggunaan Aplikasi</h2>
+                            <h5 style="color: #f7fcff; font-weight: 500;">
+                                Berikut adalah langkah-langkah untuk menggunakan aplikasi cuaca ini:
+                            </h5>
+                            <ol style="text-align: left; margin-top: 20px; color: #f7fcff;">
+                                <li>Pilih halaman yang anda inginkan pada navigasi bagian atas</li>
+                                <li>Pada halaman beranda pilih lokasi map sesuai dengan yang di inginkan</li>
+                                <li>Klik tombol "Cek cuaca" untuk mendapatkan informasi cuaca terkini.</li>
+                                <li>Pada halaman fitur terdapat 3 menu utama yang bisa digunakan yaitu Perkiraan Cuaca, Jadawal Matahari, dan Tingkat Polusi</li>
+                                <li>Gunakan fitur "Perkiraan Cuaca" untuk mendapatkan prakiraan cuaca dengan memilih lokasi pada map, lalu klik tombol "Cek perkiraan".</li>
+                                <li>Untuk mengetahui jadwal terbit dan terbenam matahari, gunakan fitur "Jadwal Matahari" dan pilih lokasi, kemudian klik tombol "Cek waktu".</li>
+                                <li>Gunakan fitur "Tingkat Polusi" untuk memeriksa kualitas udara dengan memasukkan latitude dan longitude, lalu klik tombol "Cek tingkat polusi".</li>
+                                <li>Jika masih menemukan bug atau kesalahan bisa hubungi developer terkait.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- End off row -->
+            </div><!-- End off container -->
+        </section><!-- End off User Guide Section -->
+    </div>
+
+<script src="js/vendor/jquery-1.11.2.min.js"></script>
+
+<script src="js/jquery.magnific-popup.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/swiper.min.js"></script>
+<script src="js/jquery.collapse.js"></script>
+<script src="js/bootsnav.js"></script>
+
+
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var timerId;
+    let map;
+    $(function (){
+        show_map("map", map, "latitude", "longitude");
+        show_map("mapFitur1", map, "latitudeFitur1", "longitudeFitur1");
+        show_map("mapFitur2", map, "latitudeFitur2", "longitudeFitur2");
+        show_map("mapFitur3", map, "latitudeFitur3", "longitudeFitur3");
+        get_location();
+        $('#featuresLink').click(function (event) {
+            event.preventDefault();
+            $('#home').hide();
+            $('#userGuide').hide();
+            $('#features').show();
+            $('#feature1').show();
+            $('#feature2').hide();
+            $('#feature3').hide();
+        });
+
+        $('#homeLink').click(function (event) {
+            event.preventDefault();
+            $('#home').show();
+            $('#features').hide();
+            $('#userGuide').hide();
+        });
+
+        $('#userGuideLink').click(function (event) {
+            event.preventDefault();
+            $('#home').hide();
+            $('#features').hide();
+            $('#userGuide').show();
+        });
+
+        $('#showFeature1').click(function (event) {
+            event.preventDefault();
+            $('#feature1').show();
+            $('#feature2').hide();
+            $('#feature3').hide();
+        });
+
+        $('#showFeature2').click(function (event) {
+            event.preventDefault();
+            $('#feature1').hide();
+            $('#feature2').show();
+            $('#feature3').hide();
+        });
+
+        $('#showFeature3').click(function (event) {
+            event.preventDefault();
+            $('#feature1').hide();
+            $('#feature2').hide();
+            $('#feature3').show();
+        });
+        $('#btnHeader').click(function (event){
+            event.preventDefault();
+            let location = get_weather_by_map("#latitude", "#longitude");
+            let lat = location.lat;
+            let long = location.long;
+            get_weather_header_now(lat,long);
+        });
+        $('#btnPolusi').click(function (event){
+            event.preventDefault();
+            let location = get_weather_by_map("#latitudeFitur3", "#longitudeFitur3");
+            let lat = location.lat;
+            let long = location.long;
+            get_polution_index(lat,long);
+        });
+        $('#btnPerkiraan').click(function (event){
+            event.preventDefault();
+            let location = get_weather_by_map("#latitudeFitur1", "#longitudeFitur1");
+            let lat = location.lat;
+            let long = location.long;
+            get_forecast(lat,long);
+        });
+        $('#btnWaktu').click(function (event){
+            event.preventDefault();
+            let location = get_weather_by_map("#latitudeFitur2", "#longitudeFitur2");
+            let lat = location.lat;
+            let long = location.long;
+            get_time(lat,long);
+        });
+    });
+
+    // FUNCTION FIX
+    function get_location(){
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(get_position);
+        } else {
+            console.log("permission denided");
+        }
+    }
+
+    function get_position(position){
+        let lat = position.coords.latitude;
+        let long = position.coords.longitude;
+        get_weather_header_now(lat, long);
+    }
+
+    function get_weather_header(lat, long){
+        $.ajax({
+            url: "/api/weather_data/?lat=" + lat + "&lon=" + long,
+            success: function(result){
+                $('#kon').html('');
+                $('#temp').html('');
+                console.log(result);
+                $('#kon').html(result.data.condition.description);
+                $('#temp').html(result.data.temperature.temp);
+        }});
+    }
+
+    function get_weather_header_now(lat, long){
+        $.ajax({
+            url: "/api/weather_header/?lat=" + lat + "&lon=" + long,
+            success: function(result){
+                $('#kon').html('');
+                $('#temp').html('');
+                $('#lokasi').html('');
+                $('#myImage').attr('src', '');
+                console.log(result);
+                let cuaca = translateWeather(result.data.now);
+                console.log(result.data.now);
+                $('#kon').html(cuaca);
+                // $('#kon').html(result.data.name);
+                $('#temp').html(result.data.temp);
+                $('#myImage').attr('src', result.data.icon);
+                $('#lokasi').html(result.data.name);
+                const timeString = result.data.time;
+                const dateTimeParts = timeString.split(' ');
+                const timePart = dateTimeParts[1];
+                const [hourString, minuteString] = timePart.split(':');
+                const hour = parseInt(hourString, 10);
+                const minute = parseInt(minuteString, 10);
+                $('#jam').html('');
+                stop_time();
+                count_time(hour, minute, 0)
+        }});
+    }
+
+    function get_polution_index(lat, long){
+        $.ajax({
+            url: "/api/polution_data/?lat=" + lat + "&lon=" + long,
+            success: function(result){
+                console.log(result);
+                if (result.data.aqi < 3) {
+                    $('#saranPolusi').html(
+                        '<img src="images/good.png" alt="udara bagus" style="height: 100px;">' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Yeay, kualitas udara di daerah Anda termasuk baik nih!</h5>' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Kami sarankan Anda untuk melakukan olahraga dan hiruplah udara segar diluar :)</h5>'
+                    );
+                } else if (result.data.aqi == 3){
+                    $('#saranPolusi').html(
+                        '<img src="images/average.png" alt="udara rata rata" style="height: 100px;">' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Hmm, kualitas udara di daerah anda termasuk cukup</h5>' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Kami sarankan anda untuk lebih memperhatikan sekitar, jika memang dibutuhkan segera pakai masker ya</h5>'
+                    );                    
+                } else {
+                    $('#saranPolusi').html(
+                        '<img src="images/bad.png" alt="udara buruk" style="height: 100px;">' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Yahh, kualitas udara di daerah anda termasuk buruk :(</h5>' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Kami sarankan anda untuk menggunakan masker saat beraktivitas luar ruangan yaa, atau bisa juga gunakan alat penjernih udara</h5>'
+                    );    
+                }
+        }});
+    }
+
+    function get_forecast(lat, long){
+        $.ajax({
+            url: "/api/forecast_data/?lat=" + lat + "&lon=" + long,
+            success: function(result){
+                console.log(result);
+                if (result.data.rataHujan <= 50) {
+                    $('#saranPerkiraan').html(
+                        '<img src="images/goodWeather.png" alt="keadaan cuaca" style="height: 80px;">' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Yeay, kemungkinan beberapa hari kedepan cuaca cerah nih!</h5>' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Kami sarankan Anda untuk memakai tabir surya untuk melindungi kulit anda</h5>'
+                    );
+                } else {
+                    $('#saranPerkiraan').html(
+                        '<img src="images/badWeather.png" alt="keadaan cuaca" style="height: 80px;">' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Yahh, kemungkinan beberapa hari kedepan cuaca tidak cerah :(</h5>' +
+                        '<h5 style="color: #474646; font-weight: 500;" class="text-white">Kami sarankan Anda untuk membawa payung, jas hujan serta ganti pakaian</h5>'
+                    );
+                }
+        }});
+    }
+
+    function get_time(lat, long){
+        $.ajax({
+            url: "/api/golden_time/?lat=" + lat + "&lon=" + long,
+            success: function(result){
+                $('#waktu').html('');
+                console.log(result);
+                $('#waktu').html(
+                    '<div class="col-md-6">' +
+                        '<img src="images/sunrise.png" alt="Sunrise" style="height: 80px;">' +
+                        '<h5 style="color: #474646;font-weight: 500;"><span class="text-white">'+result.data.sunrise+'</span></h5>' +
+                    '</div>' +
+                    '<div class="col-md-6">' +
+                        '<img src="images/sunset.png" alt="Sunrise" style="height: 80px;">' +
+                        '<h5 style="color: #474646;font-weight: 500;"><span class="text-white">'+result.data.sunset+'</span></h5>' +
+                    '</div>'
+                );
+        }});
+    }
+
+    function get_testing(lat, long){
+        $.ajax({
+            url: "/api/weather_data/?lat=" + lat + "&lon=" + long,
+            success: function(result){
+                $('#kon').html('');
+                $('#temp').html('');
+                console.log(result);
+                $('#kon').html(result.data.condition.description);
+                $('#temp').html(result.data.temperature.temp);
+        }});
+    }
+
+    function showTime(){
+        var date = new Date();
+        console.log(date);
+        var h = date.getHours(); // 0 - 23
+        var m = date.getMinutes(); // 0 - 59
+        var s = date.getSeconds(); // 0 - 59
+        var session = "AM";
+        
+        if(h == 0){
+            h = 12;
+        }
+        
+        if(h > 12){
+            h = h - 12;
+            session = "PM";
+        }
+        
+        h = (h < 10) ? "0" + h : h;
+        m = (m < 10) ? "0" + m : m;
+        s = (s < 10) ? "0" + s : s;
+        
+        var time = h + ":" + m + ":" + s + " " + session;
+        document.getElementById("jam").innerText = time;
+        document.getElementById("jam").textContent = time;
+        
+        setTimeout(showTime, 1000);
+        
+    }
+
+    function count_time(hour, minute, second) {
+        var h = hour || 0;
+        var m = minute || 0; 
+        var s = second || 0; 
+        if (h < 10 && String(h).length < 2) {
+            h = "0" + h;
+        }
+        if (m < 10 && String(m).length < 2) {
+            m = "0" + m;
+        }
+        s = (s < 10) ? "0" + s : s;
+        
+        var time = h + ":" + m + ":" + s;
+        $('#jam').html(time);
+        
+        timerId = setTimeout(function() {
+            s++;
+            if (s == 60) {
+                s = 0;
+                m++;
+                if (m == 60) {
+                    m = 0;
+                    h++;
+                    if (h == 24) {
+                        h = 0;
+                    }
+                }
+            }
+            count_time(h, m, s);
+        }, 1000);
+    }
+
+    function stop_time() {
+        clearTimeout(timerId);
+    }
+    
+    function translateWeather(description) {
+        let cuaca;
+        if (description === "Sunny") {
+            cuaca = "Cerah";
+        } else if (description === "Clear") {
+            cuaca = "Cerah";
+        } else if (description === "Partly cloudy") {
+            cuaca = "Berawan sebagian";
+        } else if (description === "Cloudy") {
+            cuaca = "Berawan";
+        } else if (description === "Overcast") {
+            cuaca = "Mendung";
+        } else if (description === "Mist") {
+            cuaca = "Kabut";
+        } else if (description === "Patchy rain possible") {
+            cuaca = "Hujan ringan mungkin";
+        } else if (description === "Patchy snow possible") {
+            cuaca = "Salju ringan mungkin";
+        } else if (description === "Patchy sleet possible") {
+            cuaca = "Hujan es ringan mungkin";
+        } else if (description === "Patchy freezing drizzle possible") {
+            cuaca = "Gerimis beku ringan mungkin";
+        } else if (description === "Thundery outbreaks possible") {
+            cuaca = "Kemungkinan badai petir";
+        } else if (description === "Blowing snow") {
+            cuaca = "Salju tertiup";
+        } else if (description === "Blizzard") {
+            cuaca = "Badai salju";
+        } else if (description === "Fog") {
+            cuaca = "Kabut";
+        } else if (description === "Freezing fog") {
+            cuaca = "Kabut beku";
+        } else if (description === "Patchy light drizzle") {
+            cuaca = "Gerimis ringan";
+        } else if (description === "Light drizzle") {
+            cuaca = "Gerimis";
+        } else if (description === "Freezing drizzle") {
+            cuaca = "Gerimis beku";
+        } else if (description === "Heavy freezing drizzle") {
+            cuaca = "Gerimis beku lebat";
+        } else if (description === "Patchy light rain") {
+            cuaca = "Hujan ringan";
+        } else if (description === "Light rain") {
+            cuaca = "Hujan ringan";
+        } else if (description === "Moderate rain at times") {
+            cuaca = "Hujan sedang kadang-kadang";
+        } else if (description === "Moderate rain") {
+            cuaca = "Hujan sedang";
+        } else if (description === "Heavy rain at times") {
+            cuaca = "Hujan lebat kadang-kadang";
+        } else if (description === "Heavy rain") {
+            cuaca = "Hujan lebat";
+        } else if (description === "Light freezing rain") {
+            cuaca = "Hujan beku ringan";
+        } else if (description === "Moderate or heavy freezing rain") {
+            cuaca = "Hujan beku sedang atau lebat";
+        } else if (description === "Light sleet") {
+            cuaca = "Hujan es ringan";
+        } else if (description === "Moderate or heavy sleet") {
+            cuaca = "Hujan es sedang atau lebat";
+        } else if (description === "Patchy light snow") {
+            cuaca = "Salju ringan";
+        } else if (description === "Light snow") {
+            cuaca = "Salju ringan";
+        } else if (description === "Patchy moderate snow") {
+            cuaca = "Salju sedang";
+        } else if (description === "Moderate snow") {
+            cuaca = "Salju sedang";
+        } else if (description === "Patchy heavy snow") {
+            cuaca = "Salju lebat";
+        } else if (description === "Heavy snow") {
+            cuaca = "Salju lebat";
+        } else if (description === "Ice pellets") {
+            cuaca = "Butiran es";
+        } else if (description === "Light rain shower") {
+            cuaca = "Hujan ringan";
+        } else if (description === "Moderate or heavy rain shower") {
+            cuaca = "Hujan sedang atau lebat";
+        } else if (description === "Torrential rain shower") {
+            cuaca = "Hujan deras";
+        } else if (description === "Light sleet showers") {
+            cuaca = "Hujan es ringan";
+        } else if (description === "Moderate or heavy sleet showers") {
+            cuaca = "Hujan es sedang atau lebat";
+        } else if (description === "Light snow showers") {
+            cuaca = "Salju ringan";
+        } else if (description === "Moderate or heavy snow showers") {
+            cuaca = "Salju sedang atau lebat";
+        } else if (description === "Light showers of ice pellets") {
+            cuaca = "Hujan es ringan";
+        } else if (description === "Moderate or heavy showers of ice pellets") {
+            cuaca = "Hujan es sedang atau lebat";
+        } else if (description === "Patchy light rain with thunder") {
+            cuaca = "Hujan ringan dengan petir";
+        } else if (description === "Moderate or heavy rain with thunder") {
+            cuaca = "Hujan sedang atau lebat dengan petir";
+        } else if (description === "Patchy light snow with thunder") {
+            cuaca = "Salju ringan dengan petir";
+        } else if (description === "Moderate or heavy snow with thunder") {
+            cuaca = "Salju sedang atau lebat dengan petir";
+        } else {
+            cuaca = description;
+        }
+        return cuaca;
+    }
+
+    function show_map(place, map, lat, long) {
+        if (map) {
+            map.remove();
+        }
+        map = new L.Map(place, {
+            center: [-7.801389, 110.364444],
+            zoom: 8
+        });
+
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        let marker = null;
+        map.on('click', (event) => {
+            if (marker !== null) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
+
+            document.getElementById(lat).value = event.latlng.lat;
+            document.getElementById(long).value = event.latlng.lng;
+        });
+    }
+
+    function get_weather_by_map(late, longe){
+        let lat = $(late).val();
+        let long = $(longe).val();
+        console.log("lat : " + lat + " long : " + long);
+        return {
+            lat: lat,
+            long: long
+        };
+    }
+
+</script>
+
+</body>
+</html>
